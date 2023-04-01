@@ -5,7 +5,7 @@ import errors from "../errors/index.js";
 
 async function create({ name, email, password }) {
   const { rowCount } = await userRepositories.findByEmail(email);
-  if (rowCount) throw errors.duplicatedEmailError(email);
+  if (rowCount) throw errors.duplicatedEmailError(email).message;
 
   const hashPassword = await bcrypt.hash(password, 10);
   await userRepositories.create({ name, email, password: hashPassword });
@@ -16,10 +16,10 @@ async function signin({ email, password }) {
     rowCount,
     rows: [user],
   } = await userRepositories.findByEmail(email);
-  if (!rowCount) throw errors.invalidCredentialsError();
+  if (!rowCount) throw errors.invalidCredentialsError().message;
 
   const validPassword = await bcrypt.compare(password, user.password);
-  if (!validPassword) throw errors.invalidCredentialsError();
+  if (!validPassword) throw errors.invalidCredentialsError().message;
 
   const token = uuidV4();
   await userRepositories.createSession({ token, userId: user.id });

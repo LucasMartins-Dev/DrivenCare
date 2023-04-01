@@ -48,8 +48,16 @@ function conflictError(message) {
     };
   }
   
+  function invalidDateError (){
+    return {
+      name: "InvalidDateError",
+      message: "Have an appointment scheduled at that time",
+    };
+  }
+  
   
   export default {
+    invalidDateError,
     invalidHourError,
     invalidDayError,
     conflictError,
