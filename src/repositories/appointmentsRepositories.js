@@ -21,14 +21,39 @@ async function create({ doctorId,userId,date,time}) {
     return comparate
   }
   
-   
-  
+  async function searchDoctorName ({name}){
+    const comparate = await connectionDb.query(`
+    SELECT * FROM doctors WHERE name like '%${name.doctorname}%' 
+    `
+    );
+    return comparate.rows
+  }
+  async function searchSpecialty ({specialty}){
+    
+    const comparate = await connectionDb.query(`
+    SELECT * FROM doctors WHERE specialty like '%${specialty.specialty}%' 
+    `
+    );
+    return comparate.rows
+  }
+  async function searchCity ({city}){
+    
+    console.log(Number(city.city))
 
+    const comparate = await connectionDb.query(`
+    SELECT * FROM doctors WHERE city = $1 
+    `
+    ,[Number(city.city)]);
+    console.log(comparate)
+    return comparate.rows
+  }
 
   export default {
     create,
-    compare
-    
+    compare,
+    searchDoctorName,
+    searchSpecialty,
+    searchCity
   }
 
  
